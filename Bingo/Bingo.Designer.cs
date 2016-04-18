@@ -1,6 +1,6 @@
 ﻿namespace Bingo
 {
-    partial class Form1
+    partial class Bingo
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -30,13 +30,13 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // Bingo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 661);
-            this.Name = "Form1";
-            this.Text = "Yvon BinGO";
+            this.Name = "Bingo";
+            this.Text = "BinGO";
             this.Load += new System.EventHandler(this.InitializeForm);
             this.ResumeLayout(false);
 
