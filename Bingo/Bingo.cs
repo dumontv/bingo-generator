@@ -15,9 +15,7 @@ namespace Bingo
         private const int NB_COLUMNS = 5;
         private const int NB_ROWS = 5;
         private const int HEADER = 100;
-
-        string[,] strings = new string[NB_ROWS,NB_COLUMNS];
-        //FileReader fileReader;
+        private Random rng = new Random();
 
         public Bingo()
         {
@@ -29,11 +27,15 @@ namespace Bingo
 
         private void InitializeForm(object sender, EventArgs e)
         {
-
-            bool isFileRead = FileReader.ReadFile("prout");//Read File
-
-            if (isFileRead)
+            //Read file
+            List<String> strings = FileReader.ReadFile("../../yvon.txt");
+          
+            if (strings != null)
             {
+                String freeSpace = strings[0];
+                strings.Remove(strings[0]);
+                Shuffle(strings);
+
                 for (int i = 0; i < panels.GetLength(0); i++)
                 {
                     for (int j = 0; j < panels.GetLength(1); j++)
@@ -48,18 +50,24 @@ namespace Bingo
                         Label newLabel = new Label();
                         newLabel.AutoSize = false;
                         newLabel.TextAlign = ContentAlignment.MiddleCenter;
-                        newLabel.Dock = DockStyle.Fill;
-                        newLabel.Text = i + ";" + j; //Add strings[i,j] from FileReader result here.
+                        newLabel.Dock = DockStyle.Fill;                    
                         newLabel.Click += new EventHandler(OnLabelClicked);
                         newLabel.Name = i + ";" + j;
+                        
+                        if (newPanel.Name == NB_ROWS / 2 + ";" + NB_COLUMNS / 2)
+                        {
+                            newLabel.Text = freeSpace;
+                            ManageClickOnLabel(newLabel);
+                        }
+                        else
+                        {
+                            newLabel.Text = strings[0];
+                            strings.Remove(strings[0]);
+                        }
 
                         panels[i, j] = newPanel;
                         newPanel.Controls.Add(newLabel);
-                        this.Controls.Add(newPanel);
-                        if (newPanel.Name == NB_ROWS / 2 + ";" + NB_COLUMNS / 2)
-                        {
-                            ManageClickOnLabel(newLabel);
-                        }
+                        this.Controls.Add(newPanel);                     
                     }
                 }
             }
@@ -69,7 +77,7 @@ namespace Bingo
                 newLabel.AutoSize = false;
                 newLabel.TextAlign = ContentAlignment.MiddleCenter;
                 newLabel.Dock = DockStyle.Fill;
-                newLabel.Text = "Game could not be loaded. Check your Data directory for missing or broken files.";
+                newLabel.Text = "A bingo card could not be loaded. Check your Data directory for missing or broken files.";
                 this.Controls.Add(newLabel);
             }
         }
@@ -111,7 +119,7 @@ namespace Bingo
             }
             if (youreWinner)
             {
-                MessageBox.Show("You have a bingo. Now go be a plebe and tell everybody about it.", "BINGO !", MessageBoxButtons.OK);
+                MessageBox.Show("You have a bingo! Now go tell everybody about it.", "BINGO !", MessageBoxButtons.OK);
             }
         }
 
@@ -168,7 +176,6 @@ namespace Bingo
                 }
                 return true;
             }
-            return false;
         }
 
         private bool CheckBackslashForBingo()
@@ -184,7 +191,19 @@ namespace Bingo
                 }
                 return true;
             }
-            return false;
+        }
+
+        private void Shuffle(List<String> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                String value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 }
