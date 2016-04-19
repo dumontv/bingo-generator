@@ -9,7 +9,7 @@ namespace Bingo
 {
     static class FileReader
     {
-        //Return a string array if the file could be accessed, null if not
+        //Return a string list if the file could be accessed, null if not
         //Read files from the Data directory, located anywhere you want within the game folder.
         public static List<string> ReadFile(string path)
         {
