@@ -50,6 +50,17 @@ namespace Bingo
             mainStrip.MenuItems.Add(superGameOption);
             this.Menu = mainStrip;
 
+            PictureBox logo = new PictureBox();
+            logo.Image = Properties.Resources.logo;
+            logo.Width = 484 / 3;
+            logo.Height = 179 / 3;
+            logo.SizeMode = PictureBoxSizeMode.StretchImage;
+            logo.Location = new Point(215, 10);
+            this.Controls.Add(logo);
+
+            this.Icon = Properties.Resources.icon;
+
+
             List<string> strings = FileReader.ReadFile(gameDataPath);
           
             if (strings != null)
