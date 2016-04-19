@@ -13,9 +13,13 @@ namespace Bingo
 {
     public partial class Bingo : Form
     {
+        private const string VERSION = "BinGO v1.2.1 - 2016-04-19";
         private const int NB_COLUMNS = 5;
         private const int NB_ROWS = 5;
         private const int HEADER = 100;
+        private const int GAME_SIZE_X = 600;
+        private const int GAME_SIZE_Y = 700; 
+
         private string gameDataPath = "Data/yvon.txt";
         private Random rng = new Random();
         Panel[,] panels;
@@ -37,29 +41,30 @@ namespace Bingo
             MenuItem superGameOption = new MenuItem();
             MenuItem subGameNewOption = new MenuItem();
             MenuItem subGameLoadOption = new MenuItem();
+            MenuItem subGameAboutOption = new MenuItem();
 
             superGameOption.Text = "Game";
             subGameNewOption.Text = "New Game";
             subGameLoadOption.Text = "Load Bingo Data";
+            subGameAboutOption.Text = "About";
 
             subGameNewOption.Click += new EventHandler(onNewGameMenuClicked);
             subGameLoadOption.Click += new EventHandler(onLoadDataMenuClicked);
+            subGameAboutOption.Click += new EventHandler(onAboutMenuClicked);
 
             superGameOption.MenuItems.Add(subGameNewOption);
             superGameOption.MenuItems.Add(subGameLoadOption);
+            superGameOption.MenuItems.Add(subGameAboutOption);
             mainStrip.MenuItems.Add(superGameOption);
             this.Menu = mainStrip;
 
             PictureBox logo = new PictureBox();
             logo.Image = Properties.Resources.logo;
-            logo.Width = 484 / 3;
-            logo.Height = 179 / 3;
             logo.SizeMode = PictureBoxSizeMode.StretchImage;
-            logo.Location = new Point(215, 10);
+            logo.Location = new Point((ClientSize.Width / 2) - (logo.Size.Width / 2), HEADER / 10);
             this.Controls.Add(logo);
 
             this.Icon = Properties.Resources.icon;
-
 
             List<string> strings = FileReader.ReadFile(gameDataPath);
           
@@ -258,6 +263,12 @@ namespace Bingo
         private void onNewGameMenuClicked(object sender, EventArgs e)
         {
             InitializeForm(sender, e);
+        }
+
+        private void onAboutMenuClicked(object sender, EventArgs e)
+        {
+            MessageBox.Show(VERSION + "\nThis application was made by Vincent Dumont and Niko Tremblay-Pagé." +
+                "\nTo contribute to the project, visit https://github.com/jackfiouse/bingo-generator", "About", MessageBoxButtons.OK);
         }
     }
 }
