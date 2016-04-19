@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,20 +16,40 @@ namespace Bingo
         private const int NB_COLUMNS = 5;
         private const int NB_ROWS = 5;
         private const int HEADER = 100;
+        private string gameDataPath = "Data/yvon.txt";
         private Random rng = new Random();
+        Panel[,] panels;
+        bool[,] selectedPanels;
 
         public Bingo()
         {
             InitializeComponent();
         }
 
-        Panel[,] panels = new Panel[NB_ROWS, NB_COLUMNS];
-        bool[,] selectedPanels = new bool[NB_ROWS, NB_COLUMNS];
-
         private void InitializeForm(object sender, EventArgs e)
         {
-            //Read file
-            List<string> strings = FileReader.ReadFile("../../yvon.txt");
+            panels = new Panel[NB_ROWS, NB_COLUMNS];
+            selectedPanels = new bool[NB_ROWS, NB_COLUMNS];
+            this.Controls.Clear();
+
+            MainMenu mainStrip = new MainMenu();
+            MenuItem superGameOption = new MenuItem();
+            MenuItem subGameNewOption = new MenuItem();
+            MenuItem subGameLoadOption = new MenuItem();
+
+            superGameOption.Text = "Game";
+            subGameNewOption.Text = "New Game";
+            subGameLoadOption.Text = "Load Bingo Data";
+
+            subGameNewOption.Click += new EventHandler(onNewGameMenuClicked);
+            subGameLoadOption.Click += new EventHandler(onLoadDataMenuClicked);
+
+            superGameOption.MenuItems.Add(subGameNewOption);
+            superGameOption.MenuItems.Add(subGameLoadOption);
+            mainStrip.MenuItems.Add(superGameOption);
+            this.Menu = mainStrip;
+
+            List<string> strings = FileReader.ReadFile(gameDataPath);
           
             if (strings != null)
             {
@@ -92,7 +113,7 @@ namespace Bingo
         {
             if (!selectedPanels[label.Name[0] - '0', label.Name[2]- '0'])
             {
-                label.BackColor = Color.Gold;
+                label.BackColor = SystemColors.ControlLight;
             }
             else
             {
@@ -193,17 +214,38 @@ namespace Bingo
             }
         }
 
-        private void Shuffle(List<String> list)
+        private void Shuffle(List<string> list)
         {
             int n = list.Count;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                String value = list[k];
+                string value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        private void onLoadDataMenuClicked(object sender, EventArgs e)
+        {
+            using(OpenFileDialog dataExplorer = new OpenFileDialog())
+            {
+                dataExplorer.InitialDirectory = "Data";
+                dataExplorer.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                dataExplorer.FilterIndex = 2;
+                dataExplorer.RestoreDirectory = true;
+                if (dataExplorer.ShowDialog() == DialogResult.OK)
+                {
+                    gameDataPath = dataExplorer.FileName;
+                    InitializeForm(sender, e);
+                }
+            }
+        }
+
+        private void onNewGameMenuClicked(object sender, EventArgs e)
+        {
+            InitializeForm(sender, e);
         }
     }
 }
