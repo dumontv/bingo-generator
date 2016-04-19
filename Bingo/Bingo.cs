@@ -28,11 +28,11 @@ namespace Bingo
         private void InitializeForm(object sender, EventArgs e)
         {
             //Read file
-            List<String> strings = FileReader.ReadFile("../../yvon.txt");
+            List<string> strings = FileReader.ReadFile("../../yvon.txt");
           
             if (strings != null)
             {
-                String freeSpace = strings[0];
+                string freeSpace = strings[0];
                 strings.Remove(strings[0]);
                 Shuffle(strings);
 
@@ -145,9 +145,9 @@ namespace Bingo
 
         private bool CheckColumnsForBingo()
         {
-            bool columnIsFull = true;
             for (int x = 0; x < NB_COLUMNS; x++)
             {
+                bool columnIsFull = true;
                 for (int y = 0; y < NB_ROWS; y++)
                 {
                     if (!selectedPanels[y, x])
