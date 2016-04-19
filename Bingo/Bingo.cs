@@ -28,6 +28,7 @@ namespace Bingo
 
         private void InitializeForm(object sender, EventArgs e)
         {
+            System.GC.Collect();
             panels = new Panel[NB_ROWS, NB_COLUMNS];
             selectedPanels = new bool[NB_ROWS, NB_COLUMNS];
             this.Controls.Clear();
