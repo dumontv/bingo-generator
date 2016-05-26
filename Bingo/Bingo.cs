@@ -171,6 +171,7 @@ namespace Bingo
                     if (!selectedPanels[x, y])
                     {
                         rowIsFull = false;
+                        break;
                     }
                 }
                 if (rowIsFull)
